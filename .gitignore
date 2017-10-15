@@ -5,3 +5,9 @@
 *.log
 *.opendb
 *.db
+x64/Debug/DarkSun.exe
+.vs/DarkSun/v15/.suo
+.vs/DarkSun/v15/ipch/AutoPCH/862b4f3b82c8ef13/MAIN.ipch
+x64/Debug/DarkSun.ilk
+.vs/DarkSun/v15/ipch/3c5457f64fe32a87.ipch
+*.ipch

@@ -1,3 +1,6 @@
+#ifndef __Entity__
+#define __Entity__
+
 #include <string>
 #include <list>
 
@@ -21,8 +24,7 @@ public:
 	string name;
 	string description;
 	EntityType type;
-
-private:
-	list<Entity*> container;
+	list<Entity*> entity;
 };
 
+#endif
