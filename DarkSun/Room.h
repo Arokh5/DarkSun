@@ -20,8 +20,7 @@ public:
 		const char* descriptionNorth, 
 		const char* descriptionSouth, 
 		const char* descriptionEast, 
-		const char* descriptionWest,
-		const map<Room*, char*> accessibleRooms);
+		const char* descriptionWest);
 	~Room();
 
 	string descriptionNorth;

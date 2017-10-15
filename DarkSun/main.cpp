@@ -20,7 +20,7 @@ int main()
 	cout << "  *--------------------------------------*" << endl << endl;
 	cout << "You are a ten years old child that lives with his parents and his little sister in a tiny house in the forest, few meters of a village called Asmund." << endl;
 	cout << "You are lying in your bed, you wake up and open your eyes. There is something strange in your bedroom. Everything seems to be on the opposite side, inverted." << endl;
-	cout << "You get up and stand in the left side of the room. It's time to investigate what's going on..." << endl;
+	cout << "You get up and stand in the middle of the room. It's time to investigate what's going on..." << endl;
 	cout << "> ";
 
 	while (!quit)

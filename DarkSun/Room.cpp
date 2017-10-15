@@ -4,13 +4,11 @@ Room::Room(const char* name, const char* generalDescription,
 	const char* descriptionNorth,
 	const char* descriptionSouth,
 	const char* descriptionEast,
-	const char* descriptionWest,
-	const map<Room*, char*> accessibleRooms) :
+	const char* descriptionWest) :
 descriptionNorth(descriptionNorth),
 descriptionSouth(descriptionSouth),
 descriptionEast(descriptionEast),
 descriptionWest(descriptionWest),
-accessibleRooms(accessibleRooms),
 Entity(name, generalDescription)
 {
 	type = ROOM;

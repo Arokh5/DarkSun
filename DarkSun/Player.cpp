@@ -50,13 +50,12 @@ bool Player::Go(const char* direction)
 
 	if (direction != nullptr)
 	{
-		for (map<Room*, char*>::iterator it = room->accessibleRooms.begin(); it != room->accessibleRooms.end() && !success; ++it)
+		for (map<Room*, char*>::iterator it = room->accessibleRooms.begin(); !success && it != room->accessibleRooms.end(); ++it)
 		{
-			if (Same(it->second, direction)) // NO FUNCIONA!
+			if (Same(it->second, direction))
 			{
 				SetRoom(it->first);
 				success = true;
-				break;
 			}
 		}
 	}
