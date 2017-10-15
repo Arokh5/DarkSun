@@ -29,8 +29,6 @@ public:
 	string descriptionEast;
 	string descriptionWest;
 	map<Room*, char*> accessibleRooms;
-
-	RoomSide roomSide;
 };
 
 #endif

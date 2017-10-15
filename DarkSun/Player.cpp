@@ -6,7 +6,6 @@ Player::Player(const char* name, const char* description, Room* room) :
 Creature(name, description, room)
 {
 	type = PLAYER;
-	this->room->roomSide = WEST;
 }
 
 Player::~Player()
@@ -20,25 +19,6 @@ string Player::Look(const char* direction)
 	if (direction == nullptr)
 	{
 		desc = room->description;
-
-		switch (room->roomSide)
-		{
-			case NORTH:
-				desc += room->descriptionNorth;
-				break;
-
-			case SOUTH:
-				desc += room->descriptionSouth;
-				break;
-
-			case EAST:
-				desc += room->descriptionEast;
-				break;
-
-			case WEST:
-				desc += room->descriptionWest;
-				break;
-		}
 	}
 	else if (direction == "north")
 	{
@@ -70,12 +50,13 @@ bool Player::Go(const char* direction)
 
 	if (direction != nullptr)
 	{
-		for (map<Room*, char*>::const_iterator it = room->accessibleRooms.begin(); it != room->accessibleRooms.end(); ++it)
+		for (map<Room*, char*>::iterator it = room->accessibleRooms.begin(); it != room->accessibleRooms.end() && !success; ++it)
 		{
 			if (Same(it->second, direction)) // NO FUNCIONA!
 			{
 				SetRoom(it->first);
 				success = true;
+				break;
 			}
 		}
 	}

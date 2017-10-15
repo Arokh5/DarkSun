@@ -64,7 +64,7 @@ void World::ParseCommand(vector<string>& args)
 					if (player->Go("north"))
 					{
 						cout << endl << "I enter to the " << player->room->name << ". " << endl;
-						cout << endl << player->room->description << "." << endl;
+						cout << player->room->description << endl;
 					}
 					else
 					{
@@ -76,7 +76,7 @@ void World::ParseCommand(vector<string>& args)
 					if (player->Go("south"))
 					{
 						cout << endl << "I enter to the " << player->room->name << ". " << endl;
-						cout << endl << player->room->description << "." << endl;
+						cout << player->room->description << endl;
 					}
 					else
 					{
@@ -88,7 +88,7 @@ void World::ParseCommand(vector<string>& args)
 					if (player->Go("east"))
 					{
 						cout << endl << "I enter to the " << player->room->name << ". " << endl;
-						cout << endl << player->room->description << "." << endl;
+						cout << player->room->description << endl;
 					}
 					else
 					{
@@ -100,7 +100,7 @@ void World::ParseCommand(vector<string>& args)
 					if (player->Go("west"))
 					{
 						cout << endl << "I enter to the " << player->room->name << ". " << endl;
-						cout << endl << player->room->description << "." << endl;
+						cout << player->room->description << endl;
 					}
 					else
 					{
