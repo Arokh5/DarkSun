@@ -44,9 +44,9 @@ void Creature::CollectItem(Item* item, Entity* newParent)
 	item->parent = newParent;
 }
 
-void Creature::DropItem(Item* item, int position, Entity* carrierRoom)
+void Creature::DropItem(Item* item, Entity* carrierRoom)
 {
-	items.erase(items.begin() + position);
+	items.remove(item);
 	item->parent = carrierRoom;
 
 	UnEquipItem(item);
@@ -58,51 +58,60 @@ bool Creature::EquipItem(Item* item)
 
 	if (item->itemType == EQUIPABLE)
 	{
-		if (item->weapon1 && !item->weapon2)
+		if (!item->equiped)
 		{
-			if (weapon1 == nullptr)
+			if (item->weapon1 && !item->weapon2)
 			{
-				itemEquiped = true;
-				weapon1 = item;
+				if (weapon1 == nullptr)
+				{
+					itemEquiped = true;
+					weapon1 = item;
+				}
+				else if (weapon2 == nullptr)
+				{
+					itemEquiped = true;
+					weapon2 = item;
+				}
+				else
+				{
+					cout << endl << "I do not have any free hands to equip this." << endl;
+				}
 			}
-			else if (weapon2 == nullptr)
+			else if (item->weapon1 && item->weapon2)
 			{
-				itemEquiped = true;
-				weapon2 = item;
+				if (weapon1 == nullptr && weapon2 == nullptr)
+				{
+					itemEquiped = true;
+					weapon1 = item;
+					weapon2 = item;
+				}
+				else
+				{
+					cout << endl << "I do not have any free hands to equip this." << endl;
+				}
 			}
-			else
+			else if (item->armor)
 			{
-				cout << endl << "I do not have any free hands to equip this." << endl;
+				if (armor == nullptr)
+				{
+					itemEquiped = true;
+					armor = item;
+				}
+				else
+				{
+					cout << endl << "I already have equipped an armor, I have to unequip first the equipped armor." << endl;
+				}
 			}
 		}
-		else if (item->weapon1 && item->weapon2)
+		else
 		{
-			if (weapon1 == nullptr && weapon2 == nullptr)
-			{
-				itemEquiped = true;
-				weapon1 = item;
-				weapon2 = item;
-			}
-			else
-			{
-				cout << endl << "I do not have any free hands to equip this." << endl;
-			}
-		}
-		else if (item->armor)
-		{
-			if (armor == nullptr)
-			{
-				itemEquiped = true;
-				armor = item;
-			}
-			else
-			{
-				cout << endl << "I already have equipped an armor, I have to unequip first the equipped armor." << endl;
-			}
+			cout << endl << "I have already equipped this item." << endl;
 		}
 
 		if (itemEquiped)
 		{
+			item->equiped = true;
+
 			for (map<string, int>::iterator it = item->bonus.begin(); it != item->bonus.end(); ++it)
 			{
 				if (Same(it->first, "strength"))
@@ -150,6 +159,8 @@ bool Creature::UnEquipItem(Item* item)
 
 	if (equiped)
 	{
+		item->equiped = false;
+
 		for (map<string, int>::iterator it = item->bonus.begin(); it != item->bonus.end(); ++it)
 		{
 			if (Same(it->first, "strength"))
@@ -180,7 +191,7 @@ void Creature::ShowStats()
 	cout << "Health -> " << health << endl;
 }
 
-bool Creature::IngestConsumable(Item* item, int position)
+bool Creature::IngestConsumable(Item* item)
 {
 	bool ingested = false;
 
@@ -208,7 +219,7 @@ bool Creature::IngestConsumable(Item* item, int position)
 			}
 		}
 
-		items.erase(items.begin() + position);
+		items.remove(item);
 	}
 
 	return ingested;

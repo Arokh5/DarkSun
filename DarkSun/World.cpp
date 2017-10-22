@@ -59,11 +59,11 @@ World::World()
 	/***********************************************/
 
 	/****** Items ****/
-	Item* lettuce = new Item("lettuce", "Eating this you regain some vitality", eastGarden, CONSUMABLE, false, false, false);
+	Item* lettuce = new Item("lettuce", "Eating this you regain some vitality", eastGarden, CONSUMABLE, false, false, false, false);
 	lettuce->AddBonus("vitality", 5);
 	items.push_back(lettuce);
 
-	Item* knife = new Item("knife", "With this kitchen knife my father prepares many delicious dishes", dinningRoom, EQUIPABLE, true, false, false);
+	Item* knife = new Item("knife", "With this kitchen knife my father prepares many delicious dishes", dinningRoom, EQUIPABLE, true, false, false, false);
 	knife->AddBonus("strength", 10);
 	items.push_back(knife);
 	/*****************/
@@ -230,12 +230,12 @@ void World::ParseCommand(vector<string>& args)
 			else if (args[0].compare("drop") == 0)
 			{
 				bool found = false;
-				for (int i = 0; i < player->items.size(); ++i)
+				for each (Item* item in player->items)
 				{
-					if (Same(args[1],player->items[i]->name))
+					if (Same(args[1], item->name))
 					{
 						found = true;
-						player->DropItem(player->items[i], i, player->room);
+						player->DropItem(item, player->room);
 						cout << endl << "You have dropped the " << args[1] << "." << endl;
 						break;
 					}
@@ -297,12 +297,12 @@ void World::ParseCommand(vector<string>& args)
 			else if (args[0].compare("eat") == 0 || args[0].compare("ingest") == 0)
 			{
 				bool found = false;
-				for (int i = 0; i < player->items.size(); ++i)
+				for each (Item* item in player->items)
 				{
-					if (Same(args[1], items[i]->name))
+					if (Same(args[1], item->name))
 					{
 						found = true;
-						if (player->IngestConsumable(items[i], i))
+						if (player->IngestConsumable(item))
 						{
 							cout << endl << args[1] << " ingested." << endl;
 							player->ShowStats();

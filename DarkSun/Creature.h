@@ -2,7 +2,7 @@
 #define __Creature__
 
 #include "Entity.h"
-#include <vector>
+#include <list>
 #include "globals.h"
 
 class Room;
@@ -15,7 +15,7 @@ public:
 	~Creature();
 	
 	Room* room = nullptr;
-	vector<Item*> items;
+	list<Item*> items;
 
 	// Stats //
 	const int strength;
@@ -38,11 +38,11 @@ public:
 
 	void SetRoom(Room* room);
 	void CollectItem(Item* item, Entity* newParent);
-	void DropItem(Item* item, int position, Entity* carrierRoom);
+	void DropItem(Item* item, Entity* carrierRoom);
 	bool EquipItem(Item* item);
 	bool UnEquipItem(Item* item);
 	void ShowStats();
-	bool IngestConsumable(Item* item, int position);
+	bool IngestConsumable(Item* item);
 };
 
 #endif
