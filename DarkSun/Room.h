@@ -23,10 +23,10 @@ public:
 		const char* descriptionWest);
 	~Room();
 
-	string descriptionNorth;
-	string descriptionSouth;
-	string descriptionEast;
-	string descriptionWest;
+	const string descriptionNorth;
+	const string descriptionSouth;
+	const string descriptionEast;
+	const string descriptionWest;
 	map<Room*, char*> accessibleRooms;
 };
 

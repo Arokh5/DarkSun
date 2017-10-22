@@ -9,6 +9,7 @@ using namespace std;
 
 class Entity;
 class Player;
+class Item;
 
 class World
 {
@@ -20,7 +21,8 @@ public:
 
 private:
 	list<Entity*> entities;
-	Player* player;
+	Player* player = nullptr;
+	vector<Item*> items;
 };
 
 #endif

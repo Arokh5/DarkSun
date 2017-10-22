@@ -2,10 +2,9 @@
 #include "Room.h"
 #include <vector>
 
-Player::Player(const char* name, const char* description, Room* room) :
-Creature(name, description, room)
+Player::Player(const char* name, const char* description, Room* room, int strength, int resistance, int vitality) :
+Creature(name, description, room, strength, resistance, vitality)
 {
-	type = PLAYER;
 }
 
 Player::~Player()

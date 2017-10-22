@@ -11,7 +11,6 @@ descriptionEast(descriptionEast),
 descriptionWest(descriptionWest),
 Entity(name, generalDescription)
 {
-	type = ROOM;
 }
 
 Room::~Room()
