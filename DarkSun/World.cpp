@@ -32,10 +32,10 @@ World::World()
 
 	/****** East garden *******/
 	Room* eastGarden = new Room("East garden", "This is the east side of the garden, my parents grow all kinds of vegetables here.",
-		"",
-		"",
-		"",
-		"");
+		"I can see a grille, because there is no way out.",
+		"There is a lot of vegetables, such as lettuce, tomatoes and eggplants.",
+		"In the distance I see mountains, I always wanted to visit them because my parents do not let me go so far...",
+		"This way I can go back to the dinning room.");
 	/**************************/
 
 	/****** South garden *******/
@@ -59,16 +59,24 @@ World::World()
 	/***********************************************/
 
 	/****** Items ****/
-	Item* knife = new Item("knife", "With this kitchen knife my father prepares many delicious dishes", dinningRoom, ROOM);
+	Item* lettuce = new Item("lettuce", "Eating this you regain some vitality", eastGarden, CONSUMABLE, false, false, false);
+	lettuce->AddBonus("vitality", 5);
+	items.push_back(lettuce);
+
+	Item* knife = new Item("knife", "With this kitchen knife my father prepares many delicious dishes", dinningRoom, EQUIPABLE, true, false, false);
 	knife->AddBonus("strength", 10);
 	items.push_back(knife);
-
 	/*****************/
 
 	player = new Player("Jacke", "The hero of the adventure", bedroom, 53, 44, 60);
+	entities.push_back(player);
 	entities.push_back(bedroom);
 	entities.push_back(corridor);
-	entities.push_back(player);
+	entities.push_back(dinningRoom);
+	entities.push_back(eastGarden);
+	entities.push_back(southGarden);
+	entities.push_back(knife);
+	entities.push_back(lettuce);
 }
 
 World::~World()
@@ -98,6 +106,10 @@ void World::ParseCommand(vector<string>& args)
 			else if (args[0].compare("equip") == 0)
 			{
 				cout << endl << "What do you want to equip?" << endl;
+			}
+			else if (args[0].compare("show") == 0)
+			{
+				cout << endl << "What do you want to show?" << endl;
 			}
 			else
 			{
@@ -190,24 +202,18 @@ void World::ParseCommand(vector<string>& args)
 			}
 			else if (args[0].compare("collect") == 0)
 			{
+				bool found = false;
 				// Loop through items cheking if they are in the same room as player
 				for each (Item* item in items)
 				{
 					if (Same(args[1], item->name))
 					{
-						// If item entity type is room
-						if (item->parentType == ROOM)
+						found = true;
+						// If item parent is same as player room
+						if (item->parent == player->room)
 						{
-							// If item room is same as player room
-							if (item->parent == player->room)
-							{
-								player->CollectItem(item);
-								cout << endl << "You've found a " << item->name << "!" << endl;
-							}
-							else
-							{
-								cout << endl << "There is no " << args[1] << " here." << endl;
-							}
+							player->CollectItem(item, player);
+							cout << endl << "You've found a " << item->name << "!" << endl;
 						}
 						else
 						{
@@ -215,22 +221,102 @@ void World::ParseCommand(vector<string>& args)
 						}
 						break;
 					}
-					else
+				}
+				if (!found)
+				{
+					cout << endl << "There is no " << args[1] << " here." << endl;
+				}
+			}
+			else if (args[0].compare("drop") == 0)
+			{
+				bool found = false;
+				for (int i = 0; i < player->items.size(); ++i)
+				{
+					if (Same(args[1],player->items[i]->name))
 					{
-						cout << endl << "There is no " << args[1] << " here." << endl;
+						found = true;
+						player->DropItem(player->items[i], i, player->room);
+						cout << endl << "You have dropped the " << args[1] << "." << endl;
+						break;
 					}
+				}
+				if (!found)
+				{
+					cout << endl << "You don't have a " << args[1] << "." << endl;
 				}
 			}
 			else if (args[0].compare("equip") == 0)
 			{
-				if (player->EquipItem(args[1]))
+				bool found = false;
+				for each (Item* item in player->items)
 				{
-					cout << endl << args[1] << " equiped." << endl;
-					player->ShowStats();
+					if (Same(args[1], item->name))
+					{
+						found = true;
+						if (player->EquipItem(item))
+						{
+							cout << endl << args[1] << " equiped." << endl;
+							player->ShowStats();
+						}
+						else
+						{
+							cout << endl << "I can not equip myself with that." << endl;
+						}
+						break;
+					}
 				}
-				else
+				if (!found)
 				{
-					cout << endl << "I don't have a " << args[1] << " to equip." << endl;
+					cout << endl << "I don't have a " << args[1] << " in my inventory." << endl;
+				}
+			}
+			else if (args[0].compare("unequip") == 0)
+			{
+				bool found = false;
+				for each (Item* item in player->items)
+				{
+					if (Same(args[1], item->name))
+					{
+						found = true;
+						if (player->UnEquipItem(item))
+						{
+							cout << endl << args[1] << " unequiped." << endl;
+						}
+						else
+						{
+							cout << endl << "The " << args[1] << " was not equipped." << endl;
+						}
+						break;
+					}
+				}
+				if (!found)
+				{
+					cout << endl << "I don't have a " << args[1] << " in my inventory." << endl;
+				}
+			}
+			else if (args[0].compare("eat") == 0 || args[0].compare("ingest") == 0)
+			{
+				bool found = false;
+				for (int i = 0; i < player->items.size(); ++i)
+				{
+					if (Same(args[1], items[i]->name))
+					{
+						found = true;
+						if (player->IngestConsumable(items[i], i))
+						{
+							cout << endl << args[1] << " ingested." << endl;
+							player->ShowStats();
+						}
+						else
+						{
+							cout << endl << "I can not eat that." << endl;
+						}
+						break;
+					}
+				}
+				if (!found)
+				{
+					cout << endl << "I don't have a " << args[1] << " in my inventory." << endl;
 				}
 			}
 			else if (args[0].compare("show") == 0)
@@ -239,6 +325,11 @@ void World::ParseCommand(vector<string>& args)
 				{
 					cout << endl;
 					player->ShowStats();
+				}
+				else if (args[1].compare("inventory") == 0 || args[1].compare("items") == 0)
+				{
+					cout << endl;
+					player->ShowInventory();
 				}
 			}
 			else
@@ -251,6 +342,6 @@ void World::ParseCommand(vector<string>& args)
 	if (!match)
 	{
 		cout << endl;
-		cout << "Your command is not valid, try again" << endl;
+		cout << "Your command is not valid, please try again." << endl;
 	}
 }

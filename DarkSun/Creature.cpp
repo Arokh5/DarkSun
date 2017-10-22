@@ -38,21 +38,71 @@ void Creature::SetRoom(Room* room)
 	this->room = room;
 }
 
-void Creature::CollectItem(Item* item)
+void Creature::CollectItem(Item* item, Entity* newParent)
 {
 	items.push_back(item);
+	item->parent = newParent;
 }
 
-bool Creature::EquipItem(const string selectedItem)
+void Creature::DropItem(Item* item, int position, Entity* carrierRoom)
+{
+	items.erase(items.begin() + position);
+	item->parent = carrierRoom;
+
+	UnEquipItem(item);
+}
+
+bool Creature::EquipItem(Item* item)
 {
 	bool itemEquiped = false;
 
-	for each (Item* item in items)
+	if (item->itemType == EQUIPABLE)
 	{
-		if (Same(item->name, selectedItem))
+		if (item->weapon1 && !item->weapon2)
 		{
-			itemEquiped = true;
+			if (weapon1 == nullptr)
+			{
+				itemEquiped = true;
+				weapon1 = item;
+			}
+			else if (weapon2 == nullptr)
+			{
+				itemEquiped = true;
+				weapon2 = item;
+			}
+			else
+			{
+				cout << endl << "I do not have any free hands to equip this." << endl;
+			}
+		}
+		else if (item->weapon1 && item->weapon2)
+		{
+			if (weapon1 == nullptr && weapon2 == nullptr)
+			{
+				itemEquiped = true;
+				weapon1 = item;
+				weapon2 = item;
+			}
+			else
+			{
+				cout << endl << "I do not have any free hands to equip this." << endl;
+			}
+		}
+		else if (item->armor)
+		{
+			if (armor == nullptr)
+			{
+				itemEquiped = true;
+				armor = item;
+			}
+			else
+			{
+				cout << endl << "I already have equipped an armor, I have to unequip first the equipped armor." << endl;
+			}
+		}
 
+		if (itemEquiped)
+		{
 			for (map<string, int>::iterator it = item->bonus.begin(); it != item->bonus.end(); ++it)
 			{
 				if (Same(it->first, "strength"))
@@ -66,6 +116,10 @@ bool Creature::EquipItem(const string selectedItem)
 				else if (Same(it->first, "vitality"))
 				{
 					health += it->second;
+					if (health > vitality)
+					{
+						health = vitality;
+					}
 				}
 			}
 		}
@@ -74,9 +128,88 @@ bool Creature::EquipItem(const string selectedItem)
 	return itemEquiped;
 }
 
+bool Creature::UnEquipItem(Item* item)
+{
+	bool equiped = false;
+
+	if (item == weapon1)
+	{
+		equiped = true;
+		weapon1 = nullptr;
+	}
+	if (item == weapon2)
+	{
+		equiped = true;
+		weapon2 = nullptr;
+	}
+	if (item == armor)
+	{
+		equiped = true;
+		armor = nullptr;
+	}
+
+	if (equiped)
+	{
+		for (map<string, int>::iterator it = item->bonus.begin(); it != item->bonus.end(); ++it)
+		{
+			if (Same(it->first, "strength"))
+			{
+				atack -= it->second;
+			}
+			else if (Same(it->first, "resistance"))
+			{
+				defense -= it->second;
+			}
+			else if (Same(it->first, "vitality"))
+			{
+				health -= it->second;
+			}
+		}
+
+		cout << endl;
+		ShowStats();
+	}
+
+	return equiped;
+}
+
 void Creature::ShowStats()
 {
 	cout << "Atack -> " << atack << endl;
 	cout << "Defense -> " << defense << endl;
 	cout << "Health -> " << health << endl;
+}
+
+bool Creature::IngestConsumable(Item* item, int position)
+{
+	bool ingested = false;
+
+	if (item->itemType == CONSUMABLE)
+	{
+		ingested = true;
+
+		for (map<string, int>::iterator it = item->bonus.begin(); it != item->bonus.end(); ++it)
+		{
+			if (Same(it->first, "strength"))
+			{
+				atack += it->second;
+			}
+			else if (Same(it->first, "resistance"))
+			{
+				defense += it->second;
+			}
+			else if (Same(it->first, "vitality"))
+			{
+				health += it->second;
+				if (health > vitality)
+				{
+					health = vitality;
+				}
+			}
+		}
+
+		items.erase(items.begin() + position);
+	}
+
+	return ingested;
 }

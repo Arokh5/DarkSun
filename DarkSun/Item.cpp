@@ -1,8 +1,11 @@
 #include "Item.h"
 
-Item::Item(const char* name, const char* description, Entity* parent, ParentTypes parentType) :
+Item::Item(const char* name, const char* description, Entity* parent, ItemTypes itemType, bool weapon1, bool weapon2, bool armor) :
 parent(parent),
-parentType(parentType),
+itemType(itemType),
+weapon1(weapon1),
+weapon2(weapon2),
+armor(armor),
 Entity(name, description)
 {
 }

@@ -27,14 +27,22 @@ public:
 	int defense;
 	int health;
 
+	// Equip //
+	Item* weapon1 = nullptr;
+	Item* weapon2 = nullptr;
+	Item* armor = nullptr;
+
 	void SetAtack();
 	void SetDefense();
 	void SetHealth();
 
 	void SetRoom(Room* room);
-	void CollectItem(Item* item);
-	bool EquipItem(const string item);
+	void CollectItem(Item* item, Entity* newParent);
+	void DropItem(Item* item, int position, Entity* carrierRoom);
+	bool EquipItem(Item* item);
+	bool UnEquipItem(Item* item);
 	void ShowStats();
+	bool IngestConsumable(Item* item, int position);
 };
 
 #endif

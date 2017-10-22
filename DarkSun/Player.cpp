@@ -1,5 +1,7 @@
+#include <iostream>
 #include "Player.h"
 #include "Room.h"
+#include "Item.h"
 #include <vector>
 
 Player::Player(const char* name, const char* description, Room* room, int strength, int resistance, int vitality) :
@@ -60,4 +62,37 @@ bool Player::Go(const char* direction)
 	}
 
 	return success;
+}
+
+void Player::ShowInventory()
+{
+	bool inventory = false;
+
+	for each (Item* item in items)
+	{
+		inventory = true;
+		cout << item->name << ":" << endl;
+
+		for (map<string, int>::iterator it = item->bonus.begin(); it != item->bonus.end(); ++it)
+		{
+			if (Same(it->first, "strength"))
+			{
+				cout << "+ " << it->second << " atack." << endl;
+			}
+			else if (Same(it->first, "resistance"))
+			{
+				cout << "+ " << it->second << " defense." << endl;
+			}
+			else if (Same(it->first, "vitality"))
+			{
+				cout << "+ " << it->second << " health." << endl;
+			}
+		}
+		cout << endl;
+	}
+
+	if (!inventory)
+	{
+		cout << "There are no items in my inventory." << endl;
+	}
 }
