@@ -6,15 +6,15 @@
 
 World::World()
 {
-	/******** Corridor ********/
+	/****************** Corridor *****************/
 	Room* corridor = new Room("Corridor", "This corridor communicates with the dining room.",
 		"There is a wall.",
 		"From here I can go to the dinning room.",
 		"This is my sister's bedroom, it's closed.",
 		"From here I can go to my bedroom again");
-	/**************************/
+	/*********************************************/
 
-	/******** Bedroom *********/
+	/***************** Bedroom *******************/
 	Room* bedroom = new Room("Bedroom", "This is my bedroom, something strange has happened here.", 
 		"I look out the window and realize that the atmosphere is rarefied, everything has a dull color. What happens to the Sun! It is hidden as in an eclipse! I had no idea that there was a solar eclipse today...",
 		"There is a bookshelf with books, none that I am interested in reading now.",
@@ -22,29 +22,53 @@ World::World()
 		"I look at myself in the mirror. I notice that my bracelet is not where it should be, it is in the opposite arm where I have been wearing it ...");
 	/**************************/
 
-	/****** Dinning room ******/
+	/*************** Dinning room ***************/
 	Room* dinningRoom = new Room("Dinning room", "This is the dinning room of the house, here we usually make family life.",
 		"From here I can go back to the corridor, also I can see the little kitchen of my home where my father has a knife collection.",
 		"Following this path I would leave the house and enter to South Garden.",
 		"There is a door that leads me to the East Garden of the house.",
 		"I can see the door of my parents bedroom.");
-	/**************************/
+	/*******************************************/
 
-	/****** East garden *******/
+	/************** East garden ****************/
 	Room* eastGarden = new Room("East garden", "This is the east side of the garden, my parents grow all kinds of vegetables here.",
 		"I can see a grille, because there is no way out.",
-		"There is a lot of vegetables, such as lettuce, tomatoes and eggplants.",
+		"There is a lot of vegetables, such as lettuce, tomatoe and eggplant.",
 		"In the distance I see mountains, I always wanted to visit them because my parents do not let me go so far...",
 		"This way I can go back to the dinning room.");
-	/**************************/
+	/******************************************/
 
-	/****** South garden *******/
+	/************* South garden ***************/
 	Room* southGarden = new Room("South garden", "This is the south side of the garden, following this path I can leave the house and enter to the forest.",
-		"",
-		"",
-		"",
-		"");
-	/**************************/
+		"I see the front door to my house.",
+		"I come out of the garden here and into the woods...",
+		"In this direction there is a plain where I will often play.",
+		"Among a pile of rocks I see half buried a tool, it looks like a screwdriver");
+	/******************************************/
+
+	/*************** The forest ***************/
+	Room* forest = new Room("Forest", "This forest is very lush. They tell the popular legends that somewhere in the forest a warrior lost his weapon...",
+		"Following this way I return to my garden.",
+		"I see a small clearing in the forest and a silhouette of something nailed to the trunk of a tree, could it be a sword?!",
+		"If I follow this way I will reach the village, it is a charming place.",
+		"A lot of logs block the passage, it seems that someone has made a barricade on purpose.");
+	/*****************************************/
+
+	/*************** The plain ***************/
+	Room* plain = new Room("Plain", "I love this place, it is very relaxing to lie on the grass watching the clouds.",
+		"From here I can see the grille of my garden.",
+		"If I follow this way I will reach the village, it is a charming place.",
+		"I see something metallic in the distance, it looks like a worn armor.",
+		"Following this way I return to my garden.");
+	/*****************************************/
+
+	/************** The village **************/
+	Room* village = new Room("Village", "This is the closest town to my house, it is a very nice place and its people are very friendly.",
+		"From here I return to the plain.",
+		"A wall surrounds the whole village.",
+		"A wall surrounds the whole village.",
+		"From here I return to the forest.");
+	/*****************************************/
 
 	/**** Define accessible rooms for each room ****/
 	corridor->accessibleRooms.insert(pair<Room*, char*>(bedroom, "west"));
@@ -55,32 +79,85 @@ World::World()
 	dinningRoom->accessibleRooms.insert(pair<Room*, char*>(corridor, "north"));
 	eastGarden->accessibleRooms.insert(pair<Room*, char*>(dinningRoom, "west"));
 	southGarden->accessibleRooms.insert(pair<Room*, char*>(dinningRoom, "north"));
-	
+	southGarden->accessibleRooms.insert(pair<Room*, char*>(forest, "south"));
+	southGarden->accessibleRooms.insert(pair<Room*, char*>(plain, "east"));
+	forest->accessibleRooms.insert(pair<Room*, char*>(southGarden, "north"));
+	forest->accessibleRooms.insert(pair<Room*, char*>(village, "east"));
+	plain->accessibleRooms.insert(pair<Room*, char*>(village, "south"));
+	plain->accessibleRooms.insert(pair<Room*, char*>(southGarden, "west"));
+	village->accessibleRooms.insert(pair<Room*, char*>(forest, "west"));
+	village->accessibleRooms.insert(pair<Room*, char*>(plain, "north"));
 	/***********************************************/
 
-	/****** Items ****/
-	Item* lettuce = new Item("lettuce", "Eating this you regain some vitality", eastGarden, CONSUMABLE, false, false, false, false);
+	/******************** Items ********************/
+	Item* lettuce = new Item("lettuce", "Eating this you regain some vitality.", eastGarden, CONSUMABLE, false, false, false, false);
 	lettuce->AddBonus("vitality", 5);
 	items.push_back(lettuce);
 
-	Item* knife = new Item("knife", "With this kitchen knife my father prepares many delicious dishes", dinningRoom, EQUIPABLE, true, false, false, false);
+	Item* tomatoe = new Item("tomatoe", "Eating this you regain some vitality.", eastGarden, CONSUMABLE, false, false, false, false);
+	tomatoe->AddBonus("vitality", 7);
+	items.push_back(tomatoe);
+
+	Item* eggplant = new Item("eggplant", "Eating this you regain some vitality.", eastGarden, CONSUMABLE, false, false, false, false);
+	eggplant->AddBonus("vitality", 10);
+	items.push_back(eggplant);
+
+	Item* knife = new Item("knife", "With this kitchen knife my father prepares many delicious dishes.", dinningRoom, EQUIPABLE, true, false, false, false);
 	knife->AddBonus("strength", 10);
 	items.push_back(knife);
-	/*****************/
 
+	Item* screwdriver = new Item("screwdriver", "This screwdriver was half buried among a pile of rocks.", southGarden, EQUIPABLE, true, false, false, false);
+	screwdriver->AddBonus("strength", 5);
+	items.push_back(screwdriver);
+
+	Item* armor = new Item("armor", "It is a worn armor.", plain, EQUIPABLE, false, false, true, false);
+	armor->AddBonus("resistance", 21);
+	armor->AddBonus("vitality", 12);
+	items.push_back(armor);
+
+	Item* log = new Item("log", "A log of the forest.", forest, EQUIPABLE, true, false, false, false);
+	log->AddBonus("strength", 3);
+	items.push_back(log);
+
+	Item* sword = new Item("sword", "Legendary sword with magical properties.", forest, EQUIPABLE, true, true, false, false);
+	sword->AddBonus("strength", 25);
+	sword->AddBonus("resistance", 15);
+	sword->AddBonus("vitality", 10);
+	items.push_back(sword);
+	/*********************************************/
+
+	/********** Instantiating the player *********/
 	player = new Player("Jacke", "The hero of the adventure", bedroom, 53, 44, 60);
-	entities.push_back(player);
-	entities.push_back(bedroom);
+	/*********************************************/
+
+	/*****Adding entities to entity list*****/
 	entities.push_back(corridor);
+	entities.push_back(bedroom);
 	entities.push_back(dinningRoom);
 	entities.push_back(eastGarden);
 	entities.push_back(southGarden);
-	entities.push_back(knife);
+	entities.push_back(forest);
+	entities.push_back(plain);
+	entities.push_back(village);
 	entities.push_back(lettuce);
+	entities.push_back(tomatoe);
+	entities.push_back(eggplant);
+	entities.push_back(knife);
+	entities.push_back(screwdriver);
+	entities.push_back(armor);
+	entities.push_back(log);
+	entities.push_back(sword);
+	entities.push_back(player);
+	/***************************************/
 }
 
 World::~World()
 {
+	for (std::list<Entity*>::reverse_iterator it = entities.rbegin(); it != entities.rend(); ++it)
+	{
+		delete *it;
+		*it = nullptr;
+	}
 }
 
 void World::ParseCommand(vector<string>& args)

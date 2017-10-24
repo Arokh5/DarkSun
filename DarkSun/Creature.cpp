@@ -74,7 +74,7 @@ bool Creature::EquipItem(Item* item)
 				}
 				else
 				{
-					cout << endl << "I do not have any free hands to equip this." << endl;
+					cout << endl << "I do not have any free hand to equip this." << endl;
 				}
 			}
 			else if (item->weapon1 && item->weapon2)
@@ -87,7 +87,7 @@ bool Creature::EquipItem(Item* item)
 				}
 				else
 				{
-					cout << endl << "I do not have any free hands to equip this." << endl;
+					cout << endl << "I do not have any free hand to equip this." << endl;
 				}
 			}
 			else if (item->armor)
