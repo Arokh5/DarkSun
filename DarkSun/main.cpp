@@ -4,11 +4,13 @@
 #include <conio.h>
 #include "World.h"
 #include "globals.h"
+#include "time.h"
 
 using namespace std;
 
 int main()
 {
+	clock_t now = clock();
 	char key;
 	string playerInput;
 	vector<string> args;
@@ -56,6 +58,16 @@ int main()
 			{
 				Tokenize(playerInput, args);
 			}
+		}
+		
+		// Check each 5 seconds
+		if (clock() - now >= 5000)
+		{
+			if (world.CheckIfBattle())
+			{
+				cout << "Fight!" << endl;
+			}
+			now = clock();
 		}
 
 		if (args.size() > 0 && (Same(args[0], "quit") || Same(args[0], "q")))

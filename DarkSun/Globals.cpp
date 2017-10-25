@@ -19,3 +19,8 @@ void Tokenize(const string& line, vector<string>& arguments)
 		arguments.push_back(string(begin, str));
 	} while (0 != *str++);
 }
+
+int RandomRange(const int minValue, const int maxValue)
+{
+	return rand() % ((maxValue + 1) - minValue) + minValue;
+}

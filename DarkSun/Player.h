@@ -2,7 +2,6 @@
 #define __Player__
 
 #include "Creature.h"
-#include "globals.h"
 
 using namespace std;
 

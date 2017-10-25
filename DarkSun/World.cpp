@@ -20,7 +20,7 @@ World::World()
 		"There is a bookshelf with books, none that I am interested in reading now.",
 		"This is my bedroom's door.",
 		"I look at myself in the mirror. I notice that my bracelet is not where it should be, it is in the opposite arm where I have been wearing it ...");
-	/**************************/
+	/********************************************/
 
 	/*************** Dinning room ***************/
 	Room* dinningRoom = new Room("Dinning room", "This is the dinning room of the house, here we usually make family life.",
@@ -421,4 +421,20 @@ void World::ParseCommand(vector<string>& args)
 		cout << endl;
 		cout << "Your command is not valid, please try again." << endl;
 	}
+}
+
+bool World::CheckIfBattle()
+{
+	bool fight = false;
+
+	if (!Same(player->room->name, "Corridor") && !Same(player->room->name, "Bedroom") && !Same(player->room->name, "Dinning room"))
+	{
+		// 20% chance
+		if (RandomRange(1, 100) <= 20)
+		{
+			fight = true;
+		}
+	}
+
+	return fight;
 }
