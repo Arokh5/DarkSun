@@ -17,13 +17,12 @@ public:
 	World();
 	~World();
 
-	list<Entity*> entities;
-	Player* player = nullptr;
-
 	void ParseCommand(vector<string>& args);
 	bool CheckIfBattle();
 
 private:
+	list<Entity*> entities;
+	Player* player = nullptr;
 	vector<Item*> items;
 };
 
