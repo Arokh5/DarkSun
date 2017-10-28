@@ -125,7 +125,7 @@ World::World()
 	Item* armor = new Item("armor", "It is a worn armor.", plain, EQUIPABLE, false, false, true, false);
 	armor->AddBonus("resistance", 21);
 	armor->AddBonus("vitality", 12);
-	armor->AddBonus("agility", -3000);
+	armor->AddBonus("agility", -2500);
 	items.push_back(armor);
 
 	Item* log = new Item("log", "A log of the forest.", forest, EQUIPABLE, true, false, false, false);
@@ -135,7 +135,7 @@ World::World()
 	Item* sword = new Item("sword", "Legendary sword with magical properties.", forest, EQUIPABLE, true, true, false, false);
 	sword->AddBonus("strength", 25);
 	sword->AddBonus("resistance", 15);
-	sword->AddBonus("agility", 7000);
+	sword->AddBonus("agility", 3000);
 	sword->AddBonus("vitality", 10);
 	items.push_back(sword);
 	/*********************************************/
