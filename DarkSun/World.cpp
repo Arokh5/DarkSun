@@ -12,7 +12,7 @@ World::World()
 		"There is a wall.",
 		"From here I can go to the dinning room.",
 		"This is my sister's bedroom, it's closed.",
-		"From here I can go to my bedroom again");
+		"From here I can go to my bedroom again.");
 	/*********************************************/
 
 	/***************** Bedroom *******************/
@@ -312,6 +312,7 @@ void World::ParseCommand(vector<string>& args)
 						{
 							player->CollectItem(item, player);
 							cout << endl << "You've found a " << item->name << "!" << endl;
+							cout << item->description << endl;
 						}
 						else
 						{
