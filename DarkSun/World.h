@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class Entity;
+class Room;
 class Player;
 class Item;
 class Creature;
