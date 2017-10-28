@@ -141,7 +141,15 @@ World::World()
 	/*********************************************/
 
 	/********** Instantiating creatures **********/
-	creatures.push_back(new Creature("Aggressive Fox", "It's not a normal fox, it has the skin reversed!", southGarden, 56, 40, 26, 92, 4000));
+	creatures.push_back(new Creature("Raging Fox", "It's not a normal fox, it has the skin reversed!", southGarden, 56, 40, 26, 92, 4000));
+	creatures.push_back(new Creature("Raging Fox", "It's not a normal fox, it has the skin reversed!", forest, 56, 40, 26, 92, 4000));
+	creatures.push_back(new Creature("Assasins Bees", "These bees move frantically, it will be difficult to reach them!", eastGarden, 49, 31, 17, 89, 2000));
+	creatures.push_back(new Creature("Twisted Rabbit", "What is wrong with this rabbit? It is completely amorphous!", eastGarden, 53, 37, 20, 77, 5500));
+	creatures.push_back(new Creature("Twisted Rabbit", "What is wrong with this rabbit? It is completely amorphous!", southGarden, 53, 37, 20, 77, 5500));
+	creatures.push_back(new Creature("Bloody Bear", "This bear has his mouth all bloody, it seems that he has just eaten something...", forest, 62, 46, 33, 75, 8000));
+	creatures.push_back(new Creature("Poisonous Hyena", "The smell of this animal is corrosive, it seems to be rotten.", plain, 51, 42, 27, 83, 6000));
+	creatures.push_back(new Creature("Damned Vulture", "It has a strange glow in the eyes, if you look at them for a long time it seems that it can enter your mind.", plain, 47, 33, 19, 88, 4500));
+	creatures.push_back(new Creature("Wicked Wizard", "He seems to be the cause of all this. I'm afraid ... I feel his power and it's huge.", village, 55, 47, 43, 93, 4000));
 	/*********************************************/
 
 	/********** Instantiating the player *********/
@@ -471,8 +479,9 @@ bool World::Fight(Creature* opponent, bool playerAtack)
 	if (playerAtack)
 	{
 		int atack = RandomRange(player->atack - (100 - player->accuracy), player->atack);
-		int damage = atack - opponent->defense;
+		int damage = atack - opponent->defense < 0 ? 0 : atack - opponent->defense;
 		opponent->health -= damage;
+		if (opponent->health < 0) opponent->health = 0;
 		cout << "You atack with a potency of " << atack << endl;
 		cout << opponent->name << " has a defense of " << opponent->defense << endl;
 		cout << opponent->name << " gets " << damage << " of damage" << endl;
@@ -481,8 +490,9 @@ bool World::Fight(Creature* opponent, bool playerAtack)
 	else
 	{
 		int atack = RandomRange(opponent->atack - (100 - opponent->accuracy), opponent->atack);
-		int damage = atack - player->defense;
+		int damage = atack - player->defense < 0 ? 0 : atack - player->defense;
 		player->health -= damage;
+		if (player->health < 0) player->health = 0;
 		cout << opponent->name << " atacks you with a potency of " << atack << endl;
 		cout << "You have a defense of " << player->defense << endl;
 		cout << "You get " << damage << " of damage" << endl;
@@ -490,14 +500,14 @@ bool World::Fight(Creature* opponent, bool playerAtack)
 	}
 	cout << endl;
 
-	if (player->health <= 0 || opponent->health <= 0)
+	if (player->health == 0 || opponent->health == 0)
 	{
-		if (opponent->health <= 0)
+		if (opponent->health == 0)
 		{
 			cout << opponent->name << " has been defeated." << endl;
 			opponent->health = opponent->vitality;
 		}
-		else if (player->health <= 0)
+		else if (player->health == 0)
 		{
 			cout << "You died." << endl;
 			cout << "GAME OVER" << endl;

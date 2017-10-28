@@ -6,6 +6,7 @@
 #include <conio.h>
 #include "World.h"
 #include "Player.h"
+#include "Room.h"
 #include "globals.h"
 #include "time.h"
 
@@ -31,6 +32,7 @@ int main()
 	World world;
 	int playerAtackSpeed;
 	int opponentAtackSpeed;
+	int sleepTime = 3;
 
 	cout << "  *--------------------------------------*" << endl;
 	cout << "*---------- Welcome to Dark Sun -----------*" << endl;
@@ -93,7 +95,7 @@ int main()
 			// Check each 5 seconds
 			if (clock() - gameNow >= 5000)
 			{
-				if (world.CheckIfBattle())
+				if (world.CheckIfBattle() || Same(world.player->room->name, "Village"))
 				{
 					gameState = FIGHT;
 					args.clear();
@@ -115,9 +117,19 @@ int main()
 			{
 				if (world.Fight(opponent, true))
 				{
-					gameState = NOFIGHT;
-					gameNow = clock();
-					cout << "> ";
+					if (Same(opponent->name, "Wicked Wizard"))
+					{
+						cout << "Congratulations! You have saved the world from the threat of the mad magician. ";
+						cout << "Now peace reigns on earth again and you can return with your family, they are waiting for you at home!" << endl;
+						sleepTime = 10;
+						quit = true;
+					}
+					else
+					{
+						gameState = NOFIGHT;
+						gameNow = clock();
+						cout << "> ";
+					}
 				}
 				playerNow = clock();
 			}
@@ -134,6 +146,6 @@ int main()
 	}
 
 	cout << "Thanks for playing Black Sun, come back again!" << endl;
-	this_thread::sleep_for(std::chrono::seconds(3));
+	this_thread::sleep_for(std::chrono::seconds(sleepTime));
 	return 0;
 }
