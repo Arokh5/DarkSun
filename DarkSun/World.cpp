@@ -90,6 +90,17 @@ World::World()
 	village->accessibleRooms.insert(pair<Room*, char*>(plain, "north"));
 	/***********************************************/
 
+	/********** Adding rooms to vector *************/
+	rooms.push_back(corridor);
+	rooms.push_back(bedroom);
+	rooms.push_back(dinningRoom);
+	rooms.push_back(eastGarden);
+	rooms.push_back(southGarden);
+	rooms.push_back(forest);
+	rooms.push_back(plain);
+	rooms.push_back(village);
+	/***********************************************/
+
 	/******************** Items ********************/
 	Item* lettuce = new Item("lettuce", "Eating this you regain some vitality.", eastGarden, CONSUMABLE, false, false, false, false);
 	lettuce->AddBonus("vitality", 5);
@@ -136,31 +147,26 @@ World::World()
 	/********** Instantiating the player *********/
 	player = new Player("Jacke", "The hero of the adventure", bedroom, 53, 44, 60, 80, 5000);
 	/*********************************************/
-
-	/*******Adding entities to entity list********/
-	entities.push_back(corridor);
-	entities.push_back(bedroom);
-	entities.push_back(dinningRoom);
-	entities.push_back(eastGarden);
-	entities.push_back(southGarden);
-	entities.push_back(forest);
-	entities.push_back(plain);
-	entities.push_back(village);
-	entities.push_back(lettuce);
-	entities.push_back(tomatoe);
-	entities.push_back(eggplant);
-	entities.push_back(knife);
-	entities.push_back(screwdriver);
-	entities.push_back(armor);
-	entities.push_back(log);
-	entities.push_back(sword);
-	entities.push_back(player);
-	/*******************************************/
 }
 
 World::~World()
 {
-	for (std::list<Entity*>::reverse_iterator it = entities.rbegin(); it != entities.rend(); ++it)
+	delete player;
+	player = nullptr;
+
+	for (std::vector<Creature*>::reverse_iterator it = creatures.rbegin(); it != creatures.rend(); ++it)
+	{
+		delete *it;
+		*it = nullptr;
+	}
+
+	for (std::vector<Item*>::reverse_iterator it = items.rbegin(); it != items.rend(); ++it)
+	{
+		delete *it;
+		*it = nullptr;
+	}
+
+	for (std::vector<Room*>::reverse_iterator it = rooms.rbegin(); it != rooms.rend(); ++it)
 	{
 		delete *it;
 		*it = nullptr;

@@ -27,7 +27,7 @@ public:
 	bool Fight(Creature* opponent, bool playerAtack);
 
 private:
-	list<Entity*> entities;
+	vector<Room*> rooms;
 	vector<Item*> items;
 	vector<Creature*> creatures;
 };
