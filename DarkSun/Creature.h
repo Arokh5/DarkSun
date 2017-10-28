@@ -11,7 +11,7 @@ class Item;
 class Creature : public Entity
 {
 public:
-	Creature(const char* name, const char* description, Room* room, const int strength, const int resistance, const int vitality);
+	Creature(const char* name, const char* description, Room* room, const int strength, const int resistance, const int vitality, const int accuracy, const int agility);
 	~Creature();
 	
 	Room* room = nullptr;
@@ -21,11 +21,14 @@ public:
 	const int strength;
 	const int resistance;
 	const int vitality;
+	const int accuracy;
+	const int agility;
 
 	// Skills //
 	int atack;
 	int defense;
 	int health;
+	int atackSpeed;
 
 	// Equip //
 	Item* weapon1 = nullptr;
@@ -35,6 +38,7 @@ public:
 	void SetAtack();
 	void SetDefense();
 	void SetHealth();
+	void SetAtackSpeed();
 
 	void SetRoom(Room* room);
 	void CollectItem(Item* item, Entity* newParent);

@@ -8,7 +8,7 @@ using namespace std;
 class Player : public Creature
 {
 public:
-	Player(const char* name, const char* description, Room* room, int strength, int resistance, int vitality);
+	Player(const char* name, const char* description, Room* room, const int strength, const int resistance, const int vitality, const int accuracy, const int agility);
 	~Player();
 
 	string Look(const char* direction);

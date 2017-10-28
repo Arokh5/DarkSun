@@ -2,15 +2,18 @@
 #include "Creature.h"
 #include "Item.h"
 
-Creature::Creature(const char* name, const char* description, Room* room, const int strength, const int resistance, const int vitality) :
+Creature::Creature(const char* name, const char* description, Room* room, const int strength, const int resistance, const int vitality, const int accuracy, const int agility) :
 room(room),
 strength(strength),
 resistance(resistance),
 vitality(vitality),
+accuracy(accuracy),
+agility(agility),
 Entity(name, description)
 {
 	SetAtack();
 	SetDefense();
+	SetAtackSpeed();
 	SetHealth();
 }
 
@@ -31,6 +34,11 @@ void Creature::SetDefense()
 void Creature::SetHealth()
 {
 	health = vitality;
+}
+
+void Creature::SetAtackSpeed()
+{
+	atackSpeed = agility;
 }
 
 void Creature::SetRoom(Room* room)
@@ -122,6 +130,10 @@ bool Creature::EquipItem(Item* item)
 				{
 					defense += it->second;
 				}
+				else if (Same(it->first, "agility"))
+				{
+					atackSpeed -= it->second;
+				}
 				else if (Same(it->first, "vitality"))
 				{
 					health += it->second;
@@ -171,6 +183,10 @@ bool Creature::UnEquipItem(Item* item)
 			{
 				defense -= it->second;
 			}
+			else if (Same(it->first, "agility"))
+			{
+				atackSpeed += it->second;
+			}
 			else if (Same(it->first, "vitality"))
 			{
 				health -= it->second;
@@ -188,6 +204,7 @@ void Creature::ShowStats()
 {
 	cout << "Atack -> " << atack << endl;
 	cout << "Defense -> " << defense << endl;
+	cout << "Atack Speed -> " << atackSpeed << endl;
 	cout << "Health -> " << health << endl;
 }
 
@@ -208,6 +225,10 @@ bool Creature::IngestConsumable(Item* item)
 			else if (Same(it->first, "resistance"))
 			{
 				defense += it->second;
+			}
+			else if (Same(it->first, "agility"))
+			{
+				atackSpeed += it->second;
 			}
 			else if (Same(it->first, "vitality"))
 			{

@@ -4,8 +4,8 @@
 #include "Item.h"
 #include <vector>
 
-Player::Player(const char* name, const char* description, Room* room, int strength, int resistance, int vitality) :
-Creature(name, description, room, strength, resistance, vitality)
+Player::Player(const char* name, const char* description, Room* room, const int strength, const int resistance, const int vitality, const int accuracy, const int agility) :
+Creature(name, description, room, strength, resistance, vitality, accuracy, agility)
 {
 }
 
@@ -82,6 +82,10 @@ void Player::ShowInventory()
 			else if (Same(it->first, "resistance"))
 			{
 				cout << "+ " << it->second << " defense." << endl;
+			}
+			else if (Same(it->first, "agility"))
+			{
+				cout << "+ " << it->second << " atackSpeed." << endl;
 			}
 			else if (Same(it->first, "vitality"))
 			{

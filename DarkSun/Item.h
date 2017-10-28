@@ -15,7 +15,7 @@ class Item : public Entity
 public:
 	Item(const char* name, const char* description, Entity* parent, ItemTypes itemType, bool weapon1, bool weapon2, bool armor, bool equiped);
 	~Item();
-
+	
 	Entity* parent;
 	map<string, int> bonus;
 	ItemTypes itemType;

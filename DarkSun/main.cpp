@@ -1,21 +1,36 @@
 #include <iostream>
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>         // std::chrono::seconds
 #include <string>
 #include <vector>
 #include <conio.h>
 #include "World.h"
+#include "Player.h"
 #include "globals.h"
 #include "time.h"
 
 using namespace std;
 
+enum GameStates
+{
+	NOFIGHT,
+	FIGHT
+};
+
 int main()
 {
-	clock_t now = clock();
+	GameStates gameState = NOFIGHT;
+	Creature* opponent = nullptr;
+	clock_t gameNow = clock();
+	clock_t playerNow = clock();
+	clock_t opponentNow = clock();
 	char key;
 	string playerInput;
 	vector<string> args;
 	bool quit = false;
 	World world;
+	int playerAtackSpeed;
+	int opponentAtackSpeed;
 
 	cout << "  *--------------------------------------*" << endl;
 	cout << "*---------- Welcome to Dark Sun -----------*" << endl;
@@ -27,64 +42,98 @@ int main()
 
 	while (!quit)
 	{
-		// Check if key pressed is available
-		// The kbhit function returns 0 if has not been recorded a key pressed. If one is available, then the value returned is nonzero.
-		if (_kbhit() != 0)
+		if (gameState == NOFIGHT)
 		{
-			// Get the key pressed
-			key = _getch();
-			// Backspace (delete)
-			if (key == '\b')
+			// Check if key pressed is available
+			// The kbhit function returns 0 if has not been recorded a key pressed. If one is available, then the value returned is nonzero.
+			if (_kbhit() != 0)
 			{
-				if (playerInput.length() > 0)
+				// Get the key pressed
+				key = _getch();
+				// Backspace (delete)
+				if (key == '\b')
 				{
-					// Delete the last char introduced and put the cursor in the right place to continue writting
-					playerInput.pop_back();
-					cout << '\b';
-					cout << " ";
-					cout << '\b';
+					if (playerInput.length() > 0)
+					{
+						// Delete the last char introduced and put the cursor in the right place to continue writting
+						playerInput.pop_back();
+						cout << '\b';
+						cout << " ";
+						cout << '\b';
+					}
+				}
+				// Return
+				else if (key != '\r')
+				{
+					// Add to playerInput each introduced char
+					playerInput += key;
+
+					// Write by console each char introduced
+					cout << key;
+				}
+				else
+				{
+					Tokenize(playerInput, args);
 				}
 			}
-			// Return
-			else if (key != '\r')
-			{
-				// Add to playerInput each introduced char
-				playerInput += key;
 
-				// Write by console each char introduced
-				cout << key;
-			}
-			else
+			if (args.size() > 0 && (Same(args[0], "quit") || Same(args[0], "q")))
 			{
-				Tokenize(playerInput, args);
+				quit = true;
+				cout << endl;
 			}
-		}
-		
-		// Check each 5 seconds
-		if (clock() - now >= 5000)
-		{
-			if (world.CheckIfBattle())
+			else if (args.size() > 0)
 			{
-				cout << "Fight!" << endl;
+				world.ParseCommand(args);
+				args.clear();
+				playerInput.clear();
+				cout << "> ";
 			}
-			now = clock();
+
+			// Check each 5 seconds
+			if (clock() - gameNow >= 5000)
+			{
+				if (world.CheckIfBattle())
+				{
+					gameState = FIGHT;
+					args.clear();
+					opponent = world.FindOpponent();
+					playerAtackSpeed = world.player->atackSpeed <= 0 ? 1000 : world.player->atackSpeed;
+					opponentAtackSpeed = opponent->atackSpeed <= 0 ? 1000 : opponent->atackSpeed;
+					playerNow = clock();
+					opponentNow = clock();
+					cout << endl << "A " << opponent->name << " appears!" << endl;
+					cout << opponent->description << endl;
+				}
+				gameNow = clock();
+			}
 		}
 
-		if (args.size() > 0 && (Same(args[0], "quit") || Same(args[0], "q")))
+		if (gameState == FIGHT)
 		{
-			quit = true;
-			cout << endl;
-		}
-		else if (args.size() > 0)
-		{
-			world.ParseCommand(args);
-			args.clear();
-			playerInput.clear();
-			cout << "> ";
+			if (clock() - playerNow >= playerAtackSpeed)
+			{
+				if (world.Fight(opponent, true))
+				{
+					gameState = NOFIGHT;
+					gameNow = clock();
+					cout << "> ";
+				}
+				playerNow = clock();
+			}
+			else if (clock() - opponentNow >= opponentAtackSpeed)
+			{
+				if (world.Fight(opponent, false))
+				{
+					gameState = NOFIGHT;
+					quit = true;
+				}
+				opponentNow = clock();
+			}
 		}
 	}
 
 	cout << "Thanks for playing Black Sun, come back again!" << endl;
-
+	this_thread::sleep_for(std::chrono::seconds(3));
 	return 0;
 }

@@ -2,6 +2,7 @@
 #include "Room.h"
 #include "Item.h"
 #include "Player.h"
+#include "Creature.h"
 #include "World.h"
 
 World::World()
@@ -113,6 +114,7 @@ World::World()
 	Item* armor = new Item("armor", "It is a worn armor.", plain, EQUIPABLE, false, false, true, false);
 	armor->AddBonus("resistance", 21);
 	armor->AddBonus("vitality", 12);
+	armor->AddBonus("agility", -3000);
 	items.push_back(armor);
 
 	Item* log = new Item("log", "A log of the forest.", forest, EQUIPABLE, true, false, false, false);
@@ -122,15 +124,20 @@ World::World()
 	Item* sword = new Item("sword", "Legendary sword with magical properties.", forest, EQUIPABLE, true, true, false, false);
 	sword->AddBonus("strength", 25);
 	sword->AddBonus("resistance", 15);
+	sword->AddBonus("agility", 7000);
 	sword->AddBonus("vitality", 10);
 	items.push_back(sword);
 	/*********************************************/
 
-	/********** Instantiating the player *********/
-	player = new Player("Jacke", "The hero of the adventure", bedroom, 53, 44, 60);
+	/********** Instantiating creatures **********/
+	creatures.push_back(new Creature("Aggressive Fox", "It's not a normal fox, it has the skin reversed!", southGarden, 56, 40, 26, 92, 4000));
 	/*********************************************/
 
-	/*****Adding entities to entity list*****/
+	/********** Instantiating the player *********/
+	player = new Player("Jacke", "The hero of the adventure", bedroom, 53, 44, 60, 80, 5000);
+	/*********************************************/
+
+	/*******Adding entities to entity list********/
 	entities.push_back(corridor);
 	entities.push_back(bedroom);
 	entities.push_back(dinningRoom);
@@ -148,7 +155,7 @@ World::World()
 	entities.push_back(log);
 	entities.push_back(sword);
 	entities.push_back(player);
-	/***************************************/
+	/*******************************************/
 }
 
 World::~World()
@@ -437,4 +444,61 @@ bool World::CheckIfBattle()
 	}
 
 	return fight;
+}
+
+Creature* World::FindOpponent()
+{
+	int creatureIndex = RandomRange(0, creatures.size() - 1);
+
+	while (creatures.at(creatureIndex)->room != player->room)
+	{
+		creatureIndex = RandomRange(0, creatures.size() - 1);
+	}
+
+	return creatures.at(creatureIndex);
+}
+
+bool World::Fight(Creature* opponent, bool playerAtack)
+{
+	bool stopFight = false;
+
+	if (playerAtack)
+	{
+		int atack = RandomRange(player->atack - (100 - player->accuracy), player->atack);
+		int damage = atack - opponent->defense;
+		opponent->health -= damage;
+		cout << "You atack with a potency of " << atack << endl;
+		cout << opponent->name << " has a defense of " << opponent->defense << endl;
+		cout << opponent->name << " gets " << damage << " of damage" << endl;
+		cout << opponent->name << " life falls to " << opponent->health << endl;
+	}
+	else
+	{
+		int atack = RandomRange(opponent->atack - (100 - opponent->accuracy), opponent->atack);
+		int damage = atack - player->defense;
+		player->health -= damage;
+		cout << opponent->name << " atacks you with a potency of " << atack << endl;
+		cout << "You have a defense of " << player->defense << endl;
+		cout << "You get " << damage << " of damage" << endl;
+		cout << "Your life falls to " << player->health << endl;
+	}
+	cout << endl;
+
+	if (player->health <= 0 || opponent->health <= 0)
+	{
+		if (opponent->health <= 0)
+		{
+			cout << opponent->name << " has been defeated." << endl;
+			opponent->health = opponent->vitality;
+		}
+		else if (player->health <= 0)
+		{
+			cout << "You died." << endl;
+			cout << "GAME OVER" << endl;
+		}
+
+		stopFight = true;
+	}
+
+	return stopFight;
 }
