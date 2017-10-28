@@ -14,6 +14,7 @@ public:
 	string Look(const char* direction);
 	bool Go(const char* direction);
 	void ShowInventory();
+	void ShowEquip();
 };
 
 #endif

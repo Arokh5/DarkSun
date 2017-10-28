@@ -100,3 +100,43 @@ void Player::ShowInventory()
 		cout << "There are no items in my inventory." << endl;
 	}
 }
+
+void Player::ShowEquip()
+{
+	bool equip = false;
+
+	for each (Item* item in items)
+	{
+		if (item->equiped)
+		{
+			equip = true;
+			cout << item->name << ":" << endl;
+
+			for (map<string, int>::iterator it = item->bonus.begin(); it != item->bonus.end(); ++it)
+			{
+				if (Same(it->first, "strength"))
+				{
+					cout << "+ " << it->second << " atack." << endl;
+				}
+				else if (Same(it->first, "resistance"))
+				{
+					cout << "+ " << it->second << " defense." << endl;
+				}
+				else if (Same(it->first, "agility"))
+				{
+					cout << "+ " << it->second << " atackSpeed." << endl;
+				}
+				else if (Same(it->first, "vitality"))
+				{
+					cout << "+ " << it->second << " health." << endl;
+				}
+			}
+			cout << endl;
+		}
+	}
+
+	if (!equip)
+	{
+		cout << "You do not have anything equipped." << endl;
+	}
+}

@@ -202,9 +202,9 @@ bool Creature::UnEquipItem(Item* item)
 
 void Creature::ShowStats()
 {
-	cout << "Atack -> " << atack << endl;
+	cout << "Attack -> " << atack << endl;
 	cout << "Defense -> " << defense << endl;
-	cout << "Atack Speed -> " << atackSpeed << endl;
+	cout << "Attack delay -> " << atackSpeed << endl;
 	cout << "Health -> " << health << endl;
 }
 

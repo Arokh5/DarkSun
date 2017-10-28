@@ -407,7 +407,7 @@ void World::ParseCommand(vector<string>& args)
 						}
 						else
 						{
-							cout << endl << "I can not eat that." << endl;
+							cout << endl << "I cannot eat that." << endl;
 						}
 						break;
 					}
@@ -428,6 +428,15 @@ void World::ParseCommand(vector<string>& args)
 				{
 					cout << endl;
 					player->ShowInventory();
+				}
+				else if (args[1].compare("equip") == 0)
+				{
+					cout << endl;
+					player->ShowEquip();
+				}
+				else
+				{
+					cout << endl << "I cannot show this." << endl;
 				}
 			}
 			else
