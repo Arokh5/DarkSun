@@ -23,7 +23,7 @@ Creature::~Creature()
 
 void Creature::SetAtack()
 {
-	atack = strength;
+	attack = strength;
 }
 
 void Creature::SetDefense()
@@ -124,7 +124,7 @@ bool Creature::EquipItem(Item* item)
 			{
 				if (Same(it->first, "strength"))
 				{
-					atack += it->second;
+					attack += it->second;
 				}
 				else if (Same(it->first, "resistance"))
 				{
@@ -177,7 +177,7 @@ bool Creature::UnEquipItem(Item* item)
 		{
 			if (Same(it->first, "strength"))
 			{
-				atack -= it->second;
+				attack -= it->second;
 			}
 			else if (Same(it->first, "resistance"))
 			{
@@ -202,9 +202,11 @@ bool Creature::UnEquipItem(Item* item)
 
 void Creature::ShowStats()
 {
-	cout << "Attack -> " << atack << endl;
+	cout << "My stats:" << endl;
+	cout << "Attack -> " << attack << endl;
 	cout << "Defense -> " << defense << endl;
-	cout << "Attack delay -> " << atackSpeed << endl;
+	cout << "Attack delay -> " << atackSpeed / 1000 << " seconds" << endl;
+	cout << "Accuracy -> " << accuracy << endl;
 	cout << "Health -> " << health << endl;
 }
 
@@ -220,7 +222,7 @@ bool Creature::IngestConsumable(Item* item)
 		{
 			if (Same(it->first, "strength"))
 			{
-				atack += it->second;
+				attack += it->second;
 			}
 			else if (Same(it->first, "resistance"))
 			{

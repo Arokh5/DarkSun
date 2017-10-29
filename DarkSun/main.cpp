@@ -128,6 +128,8 @@ int main()
 					{
 						gameState = NOFIGHT;
 						gameNow = clock();
+						args.clear();
+						playerInput.clear();
 						cout << "> ";
 					}
 				}
@@ -137,7 +139,6 @@ int main()
 			{
 				if (world.Fight(opponent, false))
 				{
-					gameState = NOFIGHT;
 					quit = true;
 				}
 				opponentNow = clock();

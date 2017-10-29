@@ -488,7 +488,7 @@ bool World::Fight(Creature* opponent, bool playerAtack)
 
 	if (playerAtack)
 	{
-		int atack = RandomRange(player->atack - (100 - player->accuracy), player->atack);
+		int atack = RandomRange(player->attack - (100 - player->accuracy), player->attack);
 		int damage = atack - opponent->defense < 0 ? 0 : atack - opponent->defense;
 		opponent->health -= damage;
 		if (opponent->health < 0) opponent->health = 0;
@@ -499,7 +499,7 @@ bool World::Fight(Creature* opponent, bool playerAtack)
 	}
 	else
 	{
-		int atack = RandomRange(opponent->atack - (100 - opponent->accuracy), opponent->atack);
+		int atack = RandomRange(opponent->attack - (100 - opponent->accuracy), opponent->attack);
 		int damage = atack - player->defense < 0 ? 0 : atack - player->defense;
 		player->health -= damage;
 		if (player->health < 0) player->health = 0;
