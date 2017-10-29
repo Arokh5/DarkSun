@@ -17,19 +17,19 @@ You are Jacke, a child who suddenly find himself alone in a world that has chang
   · west/left <br/>
   
 ### collect
-  · "name of the item" <br/>
+  · "item name" <br/>
   
 ### drop
-  · "name of the item" <br/>
+  · "item name" <br/>
   
 ### equip
-  · "name of the item" <br/>
+  · "item name" <br/>
   
 ### unequip
-  · "name of the item" <br/>
+  · "item name" <br/>
   
 ### eat
-  · "name of the food" <br/>
+  · "item name" <br/>
   
 ### show
   · stats <br/>
