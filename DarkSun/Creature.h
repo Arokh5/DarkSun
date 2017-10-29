@@ -25,7 +25,7 @@ public:
 	const int agility;
 
 	// Skills //
-	int atack;
+	int attack;
 	int defense;
 	int health;
 	int atackSpeed;
